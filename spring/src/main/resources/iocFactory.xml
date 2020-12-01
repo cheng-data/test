@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+<!--  静态工厂：类名.静态方法-->
+        <bean id="person" class="com.jason.factory.PersonStaticFactory" factory-method="getInstance">
+            <constructor-arg value="zhangsan"></constructor-arg>
+        </bean>
+<!--    实例工厂：先创建工厂实例，然后调用实例方法-->
+    <bean id="instanceFactory" class="com.jason.factory.PersonInstanceFactory" ></bean>
+    <bean id="person2" class="com.jason.bean.Person" factory-bean="instanceFactory" factory-method="getInstance">
+        <constructor-arg value="lisi"></constructor-arg>
+    </bean>
+</beans>

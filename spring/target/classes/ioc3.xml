@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="person3" class="com.jason.spring.bean.Person3">
+        <constructor-arg name="age" value="3"></constructor-arg>
+        <constructor-arg name="name" value="jason3"></constructor-arg>
+        <constructor-arg name="id" value="3"></constructor-arg>
+        <constructor-arg name="gender" value="3"></constructor-arg>
+        <constructor-arg name="birth" value="2020/11/24"></constructor-arg>
+    </bean>
+
+</beans>

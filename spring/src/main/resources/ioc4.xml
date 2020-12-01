@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!--    添加p命名空间-->
+
+    <bean id="person4" class="com.jason.spring.bean.Person"
+        p:id="5" p:name="jason5" p:age="5" p:gender="male5" >
+
+    </bean>
+
+
+
+<!--    复杂类型进行赋值-->
+    <bean name="person5" class="com.jason.bean.Person">
+        <property name="id" value="5"></property>
+        <property name="name" value="jason5"></property>
+        <property name="age" value="5"></property>
+        <property name="gender" value="female5"></property>
+<!--        <property name="hobbies" value="book,reading,swimming"></property>-->
+        <property name="hobbies">
+            <array>
+                <value>book</value>
+                <value>playing</value>
+                <value>read</value>
+            </array>
+        </property>
+        <property name="address" ref="address"></property>
+        <property name="lists">
+            <list>
+                <value>1</value>
+                <value>2</value>
+                <value>3  </value>
+            </list>
+        </property>
+        <property name="lists2">
+            <list>
+                <bean class="com.jason.bean.Address">
+                    <property name="province" value="北京"></property>
+                </bean>
+                <bean class="com.jason.bean.Address">
+                    <property name="province" value="上海"></property>
+                </bean>
+                <ref bean="address"></ref>
+            </list>
+        </property>
+    </bean>
+    <bean id="address" class="com.jason.bean.Address">
+        <property name="province" value="江苏省"></property>
+        <property name="city" value="连云港市"></property>
+        <property name="town" value="东海县"></property>
+    </bean>
+
+
+</beans>
