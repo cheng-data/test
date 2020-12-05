@@ -12,7 +12,9 @@
         <module name="ip" />
         <module name="whyioc" />
         <module name="juc" />
+        <module name="project" />
         <module name="Stream" />
+        <module name="juc2" />
         <module name="CollectionAndMap" />
         <module name="com.jason.juc" />
       </profile>

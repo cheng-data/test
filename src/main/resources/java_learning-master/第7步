@@ -1,0 +1,297 @@
+ 熟悉Java常用的数据结构，如基本的数组类型，以及泛型容器（java.util.*），尤其是java.util.List<T>接口
+ 和java.util.ArrayList<T>实现；以及java.util.Map<T,U>接口和java.util.HashMap<T,U>实现。（java1.5以前的没有泛
+ 型参数的就不用碰了）同时留意一下基本类型int, double等和装箱类型Integer和Double的区别，以及它们是如何自动转换的。
+ 
+ java 常用的数据结构主要分为collection和map两种接口，常用的数据结构主要是继承来自这些接口的数据结构类。
+ Collection---->Collections                                                            Map----->SortedMap------>TreeMap
+ Collection---->List----->(Vector \ ArryList \ LinkedList)                             Map------>HashMap----->linkedhashmap
+ Collection---->Set------>(HashSet \ LinkedHashSet \ SortedSet)
+ 
+ interfaces        hashtable             resizable array               tree             linked list         hash table + linked list
+ Set               HashSet                                             Treeset                              LinkedHashSet
+ List                                    ArrayList                                      LinkedList
+ Queue
+ Map               HashMap                                             TreeMap                              LinkedHashMap
+ 
+ HashMap无序
+ LinkedHashMap有序
+ (1)java vector(java.util.vector)
+     可实现自动增长的对象数组。嗯，动态数组。
+     向量类提供了三种构造方法： 
+     public vector() 
+     public vector(int initialcapacity,int capacityIncrement) 
+     public vector(int initialcapacity)
+     使用第一种方法系统会自动对向量进行管理，若使用后两种方法。则系统将根据参数，initialcapacity设定向量对象的
+     容量（即向量对象可存储数据的大小），当真正存放的数据个数超过容量时。系统会扩充向量对象存储容量。
+     参数capacityincrement给定了每次扩充的扩充值。当capacityincrement为0的时候，则没次扩充一倍，利用这个功能可以优化
+     存储。在Vector类中提供了各种方法方便用户的使用
+     插入功能，插入整数1时不要直接v1.addElement(1)
+     (a)Vector v1 = new Vector(); 
+        Integer integer1 = new Integer(1); 
+        v1.addElement(integer1); 
+     覆盖功能
+     (b)public final synchronized void setElementAt(Object obj,int index) 
+        将index处的对象设置成obj，原来的对象将被覆盖。
+        vector里面存的是对象类型。
+     (c)public final synchronized void insertElementAt(Object obj,int index) 
+        在index指定的位置插入obj，原来对象以及此后的对象依次往后顺延。
+     删除功能
+     (d) public final synchronized void removeElement(Object obj) 
+        从向量中删除obj,若有多个存在，则从向量头开始试，删除找到的第一个与obj相同的向量成员。 
+     (e)public final synchronized void removeAllElement(); 
+        删除向量所有的对象 
+     (f)public fianl synchronized void removeElementAt(int index) 
+        删除index所指的地方的对象
+     查找功能
+     (g)public final int indexOf(Object obj) 
+        从向量头开始搜索obj,返回所遇到的第一个obj对应的下标，若不存在此obj,返回-1. 
+     (h)public final synchronized int indexOf(Object obj,int index) 
+        从index所表示的下标处开始搜索obj. 
+     (i)public final int lastindexOf(Object obj) 
+        从向量尾部开始逆向搜索obj. 
+     (k)public final synchornized int lastIndex(Object obj,int index) 
+        从index所表示的下标处由尾至头逆向搜索obj. 
+     (l)public final synchornized firstElement() 
+        获取向量对象中的首个obj 
+     (m)public final synchornized Object lastElement() 
+        获取向量对象的最后一个obj
+     (n)类vector定义了方法 
+        public final int size(); 
+        此方法用于获取向量元素的个数。它们返回值是向量中实际存在的元素个数，而非向量容量。可以调用方法capacity()来获取容量值。
+     (o)取出元素
+        s.elementAt(1) 返回的是第二个元素
+(2)java ArrayList(java.util.*)  
+    它是一个数组队列，提供了相关的添加、删除、修改、遍历等功能,提供了随机访问功能,ArrayList 本身就没有去重的功能
+    ArrayList的API
+       // Collection中定义的API
+       ArrayList list = new ArrayList();
+    boolean             add(E object)                                   list.add(1)   
+    
+    boolean             addAll(Collection<? extends E> collection)      ArrayList<Integer> arrlist = new ArrayList<Integer>();
+                                                                        arrlist.add(2);
+                                                                        arrlist.add(3);
+                                                                        ArrayList<Integer> arrlist2 = new ArrayList<Integer>();
+                                                                        arrlist2.add(2);
+                                                                        arrlist2.add(3);
+                                                                        arrlist.addAll(arrlist2);
+                                                                        在小数据量时，for循环效率高，大数据量时addAll方法效率高：
+                                                                        1.使用内存拷贝，移动数据。
+                                                                        2.本地函数，执行效率高
+                                                                        
+    void                clear()                                         list.clear();后清空所有元素，size()为0
+    
+    boolean             contains(Object object)                         如果此列表包含指定的元素，此方法返回true。
+    
+    boolean             containsAll(Collection<?> collection)           containsAll方法用于判断列表中是否包含指定collection的所有元素。
+                                                                        arrlist2.containsAll(arrlist);
+                                                                        
+    boolean             equals(Object object)                           ArrayList的equals方法，两个size()相等的list，在相同order中的
+                                                                        对象相等，则两个lisit相等，如果只想比较两个 list中的元素是否相等，
+                                                                        不考虑order，那么先用Collections.sort()方法对list进行排序再进
+                                                                        行比较。。。
+                                                                        
+    int                 hashCode()                                      这个貌似hashset用的多(待定) 
+     
+    boolean             isEmpty()                                       判定是否为空
+    
+    Iterator<E>         iterator()                                      迭代器
+    
+    boolean             remove(Object object)                           在项目开发中，我们可能往往需要动态的删除ArrayList中的一些元素。
+                                                                        这种方法是错误的
+                                                                        for(int i = 0 , len= list.size();i<len;++i){  
+                                                                           if(list.get(i)==XXX){  
+                                                                                   list.remove(i);  
+                                                                           }  
+                                                                        }
+                                                                        因为你删除了元素，但是未改变迭代的下标，这样当迭代到最后一个的时候就
+                                                                        会抛异常咯。
+                                                                        for(int i = 0 , len= list.size();i<len;++i){  
+                                                                            if(list.get(i)==XXX){  
+                                                                                 list.remove(i);  
+                                                                                 --len;//减少一个  
+                                                                                 --i;//多谢deny_guoshou指正，如果不加会出现评论1楼所说的情况。  
+                                                                            }  
+                                                                         }
+                                                                         
+    boolean             removeAll(Collection<?> collection)                list.removeAll(sub2); 
+                                                                          是删出list中包含sub2中的元素的。
+    boolean             retainAll(Collection<?> collection)
+    int                 size()
+    <T> T[]             toArray(T[] array)                               第二种方法是将list转化为你所需要类型的数组,
+                                                                         String[] array =new String[list.size()];
+                                                                         list.toArray(array);
+    Object[]            toArray()                                        是将list直接转为Object[] 数组；
+    // AbstractCollection中定义的API
+    void                add(int location, E object)
+    boolean             addAll(int location, Collection<? extends E> collection)
+    E                   get(int location)
+    int                 indexOf(Object object)
+    int                 lastIndexOf(Object object)
+    ListIterator<E>     listIterator(int location)
+    ListIterator<E>     listIterator()
+    E                   remove(int location)
+    E                   set(int location, E object)
+    List<E>             subList(int start, int end)
+    // ArrayList新增的API
+    Object               clone()
+    void                 ensureCapacity(int minimumCapacity)
+    void                 trimToSize()
+    void                 removeRange(int fromIndex, int toIndex)
+   
+ (3)LinkedList
+   网页:http://blog.csdn.net/jdsjlzx/article/details/41654295
+   LinkedList类是双向列表,列表中的每个节点都包含了对前一个和后一个元素的引用.
+   LinkedList<String> lList = new LinkedList<String>();
+   添加:
+      lList.add("1");
+   第一个和最后一个元素
+      lList.getFirst()
+      lList.getLast()
+   获取链表元素
+      for (String str: lList) {  
+        System.out.println(str);  
+      }  
+   也可以把链表当初栈或者队列来处理:
+      public boolean addFirst(Object element)
+      public boolean addLast(Object element) 
+  删除元素 
+       list.removeFirst();  
+       list.removeLast();
+  删掉所有元素：清空LinkedList
+    lList.clear();  
+  根据范围删除列表元素 
+    lList.subList(2, 5).clear();
+  删除链表的特定元素
+    lList.remove("2")删除元素值=2的元素
+    lList.remove(2);  //删除第2个元素，链表
+  将LinkedList转换为数组,数组长度为0
+    String[] my = theList.toArray(new String[0])
+  将LinkedList转换为数组，数组长度为链表长度
+    String[] my = theList.toArray(new String[theList.size()]);
+  查找位置
+    .indexOf("2")
+  替换元素
+    lList.set(3, "Replaced");//使用set方法替换元素，方法的第一个参数是元素索引，后一个是替换值  
+  确认链表是否存在特定元素  
+    lList.contains("4")
+  
+
+
+Map:
+  HashMap
+  当我们把 Java 对象放入数组之时，并不是真正的把 Java 对象放入数组中，只是把对象的引用放入数组中，每个数组元素都是一个引用变量。
+   HashMap<String, double> hashMap = new HashMap<String, double>(); 
+   hashmap.containsKey()
+   hashmap.get()
+  存储:
+  map.put("语文" , 80.0);   
+  map.put("数学" , 89.0);   
+  map.put("英语" , 78.2);
+  读取:
+  .get(key)
+  遍历
+  第一种:
+　　Map map = new HashMap();
+　　Iterator iter = map.entrySet().iterator();
+　　while (iter.hasNext()) {
+　　Map.Entry entry = (Map.Entry) iter.next();
+　　Object key = entry.getKey();
+　　Object val = entry.getValue();
+　　}
+　　效率高,以后一定要使用此种方式！
+   第二种:
+　　Map map = new HashMap();
+　　Iterator iter = map.keySet().iterator();
+　　while (iter.hasNext()) {
+　　Object key = iter.next();
+　　Object val = map.get(key);
+　　}
+　　效率低,以后尽量少使用！
+
+ TreeMap
+   网址:http://blog.csdn.net/chenssy/article/details/26668941
+   hashmap是没有顺序的，而treemap则是按顺序排列的哦！！
+   HashMap通过hashcode对其内容进行快速查找，而TreeMap中所有
+   的元素都保持着某种固定的顺序，如果你需要得到一个有序的结果你就应该使用TreeMap（HashMap中元素的排列顺序是不固定的）。
+   红黑树(待定)
+ 
+Set
+   HashSet
+   set中不能存储重复的元素，可以存储null元素。如果需要存储多个重复元素，需要使用List。
+   它不允许出现重复元素；
+   不保证和政集合中元素的顺序
+   允许包含值为null的元素，但最多只能有一个null元素。
+   boolean	add(E o) 
+          如果此集合中还不包含指定元素，则添加指定元素。
+ void	clear() 
+          从此集合中移除所有元素。
+ Object	clone() 
+          返回此 HashSet 实例的浅表复制：并没有克隆这些元素本身。
+ boolean	contains(Object o) 
+          Returns 如果此集合不包含指定元素，则返回 true。
+ boolean	isEmpty() 
+          如果此集合不包含任何元素，则返回 true。
+ Iterator<E>	iterator() 
+          返回对此集合中元素进行迭代的迭代器。
+ boolean	remove(Object o) 
+          如果指定元素存在于此集合中，则将其移除。
+ int	size() 
+          返回此集合中的元素的数量（集合的容量）     
+
+LinkedHashSet
+  类HashSet和LinkedHashSet都是接口Set的实现，两者都不能保存重复的数据。主要区别是HashSet不保证集合中元素的顺序，即不能保证迭代的顺序与插入的顺序一致。
+  而LinkedHashSet按照元素插入的顺序进行迭代，即迭代输出的顺序与插入的顺序保持一致。
+  HashSet<String> hs = new HashSet<String>();  
+        hs.add("B");  
+        hs.add("A");  
+        hs.add("D");  
+        hs.add("E");  
+        hs.add("C");  
+        hs.add("F");  
+        System.out.println("HashSet 顺序:\n"+hs);  
+        HashSet 顺序:
+       [D, E, F, A, B, C]
+       
+  LinkedHashSet<String> lhs = new LinkedHashSet<String>();  
+        lhs.add("B");  
+        lhs.add("A");  
+        lhs.add("D");  
+        lhs.add("E");  
+        lhs.add("C");  
+        lhs.add("F");  
+        System.out.println("LinkedHashSet 顺序:\n"+lhs);  
+         LinkedHashSet 顺序:
+        [B, A, D, E, C, F]
+  
+TreeSet
+     HashSet：哈希表是通过使用称为散列法的机制来存储信息的，元素并没有以某种特定顺序来存放；  
+ *    LinkedHashSet：以元素插入的顺序来维护集合的链接表，允许以插入的顺序在集合中迭代；  
+ *    TreeSet：提供一个使用树结构存储Set接口的实现，对象以升序顺序存储，访问和遍历的时间很快。
+ TreeSet<String> ts = new TreeSet<String>();  
+        ts.add("B");  
+        ts.add("A");  
+        ts.add("D");  
+        ts.add("E");  
+        ts.add("C");  
+        ts.add("F");  
+        System.out.println("TreeSet 顺序:\n"+ts);
+        TreeSet 顺序:
+[A, B, C, D, E, F]
+
+
+
+java中栈类的使用
+   2-->public boolean empty()测试堆栈是否为空;
+ 
+   3-->public E pop()移除堆栈顶部的对象，并作为此函数的值返回该对象。 
+ 
+   4-->public E push(E item)把项压入堆栈顶部
+ 
+   5-->public E peek()查看堆栈顶部的对象，但不从堆栈中移除它。 
+ 
+   6-->public boolean empty()测试堆栈是否为空
+
+   Stack<Character> sk = new Stack<Character>();
+   
+
+

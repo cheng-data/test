@@ -17,6 +17,8 @@
         <module>Stream</module>
         <module>whyioc</module>
         <module>spring</module>
+        <module>project</module>
+        <module>juc2</module>
     </modules>
 
     <properties>

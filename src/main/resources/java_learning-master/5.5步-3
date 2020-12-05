@@ -1,0 +1,106 @@
+对象与对象引用的区别，注意垃圾回收。
+这部分相当重要，之前一直弄混，如今找到一个好的文档，借此梳理。
+网址:http://blog.sina.com.cn/s/blog_4cd5d2bb0100ve9r.html
+内容:
+  首先定义一个简单的类
+  class Vehicle {
+       int passengers;      
+       int fuelcap;
+       int mpg;
+  }
+  然后一般创建对象都有这句代码: Vehicle veh1 = new Vehicle();
+  按照网址的内容所述，这一句代码包含4个动作
+  1）右边的“new Vehicle”，是以Vehicle类为模板，在堆空间里创建一个Vehicle类对象（也简称为Vehicle对象）。
+  2）末尾的()意味着，在对象创建后，立即调用Vehicle类的构造函数，对刚生成的对象进行初始化。构造函数是肯定有的。
+  如果你没写，Java会给你补上一个默认的构造函数。
+  3）左边的“Vehicle veh1”创建了一个Vehicle类引用变量。所谓Vehicle类引用，就是以后可以用来指向Vehicle对象的对象引用。
+  4）“=”操作符使对象引用指向刚创建的那个Vehicle对象。
+  将这句代码拆成两段：
+  Vehicle veh1;
+  veh1 = new Vehicle();
+  有两个实体，一个是类对象引用变量，一个是类对象本身
+  对象创建在堆当中，而引用变量在数据段以及栈空间中(虚拟机栈中存着对象引用)，二者所在的地方不同。
+  一个类Vehicle 可以创建很多个对象，但他们的名字是什么，不可能都叫Vehicle，那么如何访问该对象呢，这是用引用变量来间接访问。
+  对象好比是一只很大的气球，大到我们抓不住它。引用变量是一根绳， 可以用来系汽球。
+  如果只执行了第一条语句，还没执行第二条，此时创建的引用变量veh1还没指向任何一个对象，它的值是null。引用变量可以指向某个对象，或者为null。
+  它是一根绳，一根还没有系上任何一个汽球的绳。执行了第二句后，一只新汽球做出来了，并被系在veh1这根绳上。我们抓住这根绳，就等于抓住了那只汽球。
+  这是如果有这一句代码:
+  Vehicle veh2;
+  就又做了一根绳，还没系上汽球。如果再加一句：
+       veh2 = veh1;
+系上了。这里，发生了复制行为。但是，要说明的是，对象本身并没有被复制，被复制的只是对象引用。结果是，veh2也指向了veh1所指向的对象。
+两根绳系的是同一只汽球。
+如果用下句再创建一个对象：
+veh2 = new Vehicle();
+则引用变量veh2改指向第二个对象
+从以上叙述再推演下去，我们可以获得以下结论：
+（1）一个对象引用可以指向0个或1个对象（一根绳子可以不系汽球，也可以系一个汽球）；
+（2）一个对象可以有N个引用指向它（可以有N条绳子系住一个汽球）。
+       如果再来下面语句：
+       veh1 = veh2;
+按上面的推断，veh1也指向了第二个对象。这个没问题。问题是第一个对象呢？没有一条绳子系住它，它飞了。多数书里说，它被Java的垃圾回收机制回收了。
+这不确切。正确地说，它已成为垃圾回收机制的处理对象。至于什么时候真正被回收，那要看垃圾回收机制的心情了。
+
+综上垃圾回收的是堆里的对象，但是要看栈空间中是否有引用变量引用该对象。在java中通过引用来操纵对象。
+Java对象和引用的关系可以说是互相关联，却又彼此独立。彼此独立主要表现在：引用是可以改变的，它可以指向别的对象，譬如上面的s，你可以给它另外
+的对象，如：s = new StringBuffer("Java");
+这样一来，s就和它指向的第一个对象脱离关系。
+
+从存储空间上来说，对象和引用也是独立的，它们存储在不同的地方，对象一般存储在堆中，而引用存储在速度更快的栈中。
+
+引用可以指向不同的对象，对象也可以被多个引用操纵，如：
+StringBuffer s1 = s;
+这条语句使得s1和s指向同一个对象。既然两个引用指向同一个对象，那么不管使用哪个引用操纵对象，对象的内容都发生改变，并且只有一份，通
+过s1和s得到的内容自然也一样，(String除外，因为String始终不变，String s1=”AAAA”; String s=s1,操作s,s1由于始
+终不变，所以为s另外开辟了空间来存储s,)如下面的程序：注意(String和StringBuffer的区别)
+StringBuffer s;
+s = new StringBuffer("Java");
+StringBuffer s1 = s;
+s1.append(" World");
+System.out.println("s1=" + s1.toString());//打印结果为：s1=Java World
+System.out.println("s=" + s.toString());//打印结果为：s=Java World
+
+这段代码很重要:
+public class ObjectRef {
+ 
+    //基本类型的参数传递
+    public static void testBasicType(int m) {
+        System.out.println("m=" + m);//m=50
+        m = 100;
+        System.out.println("m=" + m);//m=100
+    }
+   
+    //参数为对象，不改变引用的值 ？？？？？？
+    public static void add(StringBuffer s) {
+        s.append("_add");
+    }
+   
+    //参数为对象，改变引用的值 ？？？？？
+    public static void changeRef(StringBuffer s) {
+        s = new StringBuffer("Java");
+    }
+   
+    public static void main(String[] args) {
+        int i = 50;
+        testBasicType(i);
+        System.out.println(i);//i=50
+        StringBuffer sMain = new StringBuffer("init");
+        System.out.println("sMain=" + sMain.toString());//sMain=init
+        add(sMain);
+        System.out.println("sMain=" + sMain.toString());//sMain=init_add
+        changeRef(sMain);
+        System.out.println("sMain=" + sMain.toString());//sMain=init_add
+    }
+}
+  以上程序的允许结果显示出，testBasicType方法的参数是基本类型，尽管参数m的值发生改变，但并不影响i。
+      add方法的参数是一个对象，当把sMain传给参数s时，s得到的是sMain的拷贝(重点)，所以s和sMain指向同一个对象，因此，使用s操作影响的其
+      实就是sMain指向的对象，故调用add方法后，sMain指向的对象的内容发生了改变。
+      在changeRef方法中，参数也是对象，当把sMain传给参数s时，s得到的是sMain的拷贝(敲黑板，重点)，但与add方法不同的是，在方法体内改变了s指
+      向的对象（也就是s指向了别的对象,牵着气球的绳子换气球了），给s重新赋值后，s与sMain已经毫无关联，它和sMain指向了不同的对象，所以不管
+      对s做什么操作，都不会影响sMain指向的对象，故调用changeRef方法前后sMain指向的对象内容并未发生改变。
+  
+  
+  
+  
+  
+  

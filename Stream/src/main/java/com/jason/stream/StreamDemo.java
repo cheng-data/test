@@ -15,7 +15,7 @@ public class StreamDemo {
 //        gen2();
 //        gen3();
 //        gen4();
-//        gen5();
+        gen5();
 //        中间操作：如果调用方法之后返回的结果是stream对象看就意味着是一个中间操作
 //        List<Integer> collect = Arrays.asList(1, 2, 3, 4, 5).stream().filter(e -> e % 2 == 0).collect(Collectors.toList());
 //        Arrays.asList(1, 2, 3, 4, 5).stream().filter(e -> e % 2 == 0).forEach(System.out::println);
